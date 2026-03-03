@@ -1,50 +1,9 @@
-// css
+import React from 'react'
 import '../../assets/css/brand-intro.css'
-
-// hooks
-import { useState } from 'react';
-
-// navigation links
-import { NavLink } from 'react-router-dom';
-
-
-const BrandIntro = () => {
-
-    const [menuOpen, setMenuOpen] = useState(false)
-
+function BrandIntro() {
   return (
-    <div className="brandIntroWrapper">
-
-      {/* ── Ambient Background Blobs ── */}
-      <div className="ambientBlob ambientBlobTopLeft" />
-      <div className="ambientBlob ambientBlobCenter" />
-      <div className="ambientBlob ambientBlobBottomRight" />
-
-      {/* ── Navbar ── */}
-      <nav className="navbar">
-        <a className="navLogo" href="#">
-          <span className="navLogoIcon">∞</span>
-          <span className="navLogoText">Whisper</span>
-        </a>
-
-        {/* Desktop Links */}
-        <div className="navLinks">
-          <button className="navLinkItem">Help</button>
-          <NavLink className={'navLinkHelp'} to='/authentication' >Register</NavLink>
-        </div>
-
-        {/* Hamburger */}
-        <div className="menuToggle" onClick={() => setMenuOpen(!menuOpen)}>
-          {menuOpen ? '✕' : '☰'}
-        </div>
-      </nav>
-
-       {/* Mobile Panel */}
-       <div className={`mobileNavPanel ${menuOpen ? 'active' : ''}`}>
-        <button onClick={() => setMenuOpen(false)}>Help</button>
-        <button onClick={() => setMenuOpen(false)}>Register</button>
-       </div>
-      {/* ── Hero Section ── */}
+    <>
+     {/* ── Hero Section ── */}
       <section className="heroSection">
 
         {/* Orbital Ring Visual */}
@@ -79,15 +38,8 @@ const BrandIntro = () => {
         </div>
 
       </section>
+    </>
+  )
+}
 
-      {/* ── Footer Strip ── */}
-      <footer className="footerStrip">
-        <span className="footerLabel">End-to-End Encrypted</span>
-        <span className='buisnessInfo'>For Buisness Contact:7987725298</span>
-      </footer>
-
-    </div>
-  );
-};
-
-export default BrandIntro;
+export default BrandIntro

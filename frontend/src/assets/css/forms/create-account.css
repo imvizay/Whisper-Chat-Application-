@@ -1,0 +1,99 @@
+.registerSection {
+  width: 460px;
+  min-height: 520px;
+  margin: 0 auto;
+  padding: 40px;
+
+  display: grid;
+  align-content: center;
+  gap: 30px;
+
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(168, 85, 247, 0.25);
+  border-radius: 24px;
+  backdrop-filter: blur(18px);
+
+  box-shadow: 0 0 60px rgba(168, 85, 247, 0.15);
+
+  color: white;
+}
+
+.closeVerification{
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  border: 1px solid white;
+  padding: 0.5rem 1rem;
+  color: white;
+  cursor: pointer;
+  transition: background 0.3s ease-in , color 0.3s ease-in;
+}
+
+.closeVerification:hover{
+  background-color: #490589;
+  color: #a855f7;
+}
+
+
+.registerSection h3 {
+  text-align: center;
+  font-size: 26px;
+  font-weight: 600;
+  background: linear-gradient(90deg, #c084fc, #a855f7);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Form Grid Layout */
+.registerSection form {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+}
+
+/* Field Block */
+.fieldBlock {
+  display: grid;
+  grid-template-rows: auto auto;
+  gap: 8px;
+}
+.fieldBlock .fieldInfo{
+  font-size: 10px;
+  color: rgb(232, 115, 232);
+}
+/* Label */
+.fieldBlock label {
+  font-size: 14px;
+  color: #c4b5fd;
+}
+
+/* Input */
+.fieldBlock input {
+  padding: 12px 15px;
+  border-radius: 12px;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  outline: none;
+  transition: 0.3s ease;
+}
+
+.fieldBlock input:focus {
+  border-color: #a855f7;
+  box-shadow: 0 0 2px #a855f7;
+}
+
+/* Button */
+.registerSection button {
+  margin-top: 10px;
+  padding: 14px;
+  border-radius: 14px;
+  border: none;
+  font-weight: 600;
+  cursor: pointer;
+
+  background: linear-gradient(135deg, #7e22ce, #a855f7);
+  color: white;
+
+  transition: 0.3s ease;
+}
