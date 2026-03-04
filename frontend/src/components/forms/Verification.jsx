@@ -1,7 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
 import "../../assets/css/forms/otp-verification.css";
 
-function OtpVerification({ setIsRegForm,  setIsOtpBox ,onVerify }) {
+import { authApi } from "../../services/authApi";
+import { useMutation } from "@tanstack/react-query";
+
+function OtpVerification({ userData,setIsRegForm,  setIsOtpBox ,onVerify }) {
   const [otp, setOtp] = useState(new Array(6).fill(""))
   const [timer, setTimer] = useState(60)
   const inputsRef = useRef([])
@@ -11,8 +14,8 @@ function OtpVerification({ setIsRegForm,  setIsOtpBox ,onVerify }) {
     setIsOtpBox(false)
     setIsRegForm(true)
   }
-  
 
+  
   // Countdown timer
   useEffect(() => {
     if (timer <= 0) return
@@ -56,11 +59,36 @@ function OtpVerification({ setIsRegForm,  setIsOtpBox ,onVerify }) {
     })
   }
 
+  const sendVerificationMutatiom = useMutation({
+    mutationFn : (otp) => authApi.verifyOtp(otp),
+    onSuccess : () => {
+      setIsOtpBox(false)
+      setIsRegForm(false)
+      alert("account created successfully on whisper.")
+    },
+    onError: (error)=>{
+      
+      console.log("otp verification failed",error)
+      alert("failed otp verification")
+    }
+  })
+
+
   const handleSubmit = (e) => {
+
     e.preventDefault()
     const finalOtp = otp.join("")
+
     if (finalOtp.length === 6) {
-      onVerify(finalOtp)
+      const data = {
+        contact:userData?.contact,
+        otp:finalOtp
+      }
+
+      sendVerificationMutatiom.mutate(data)
+    }
+    else{
+      console.log("invalid otp")
     }
   }
 

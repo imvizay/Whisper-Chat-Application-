@@ -43,7 +43,7 @@ export default function RegisterAccount() {
   }
 
 
-  // send otp tanstack query
+  // send otp to backend server
   const sendOtpMutation = useMutation({
 
     mutationFn : (data) => authApi.sendOtp(data),
@@ -136,6 +136,7 @@ export default function RegisterAccount() {
 
      {isOtpBoxOpen && ( 
       <OtpVerification 
+                userData = {userData}
                 setIsRegForm={setIsRegForm}
                 setIsOtpBox={setIsOtpBox}
                 onVerify={onVerify}
