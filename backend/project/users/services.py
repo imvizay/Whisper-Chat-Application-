@@ -1,0 +1,21 @@
+from twilio.rest import Client
+from django.conf import settings 
+
+
+def send_sms_otp(phone,otp):
+
+    # twilio require phone number in E.164 format to send messages. 
+    if not phone.startswith('+'):
+        phone = "+91" + phone # IND
+
+    client = Client(
+        settings.TWILIO_ACCOUNT_SID,
+        settings.TWILIO_AUTH_TOKEN
+    )
+
+    message = client.messages.create(
+        body=f"Your OTP is {otp}",
+        from_=settings.TWILIO_PHONE_NUMBER,
+        to=phone
+    )
+    return message.sid
