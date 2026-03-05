@@ -9,13 +9,18 @@ const queryClient = new QueryClient()
 
 // routing setup
 import { BrowserRouter } from 'react-router-dom'
+ 
+// authentication context (usercontext)
+import { AuthProvider } from './contexts/authContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
-
    <QueryClientProvider client={queryClient}>
-         <App />
+      
+      <AuthProvider>
+           <App />
+      </AuthProvider>
+
    </QueryClientProvider>
-   
   </BrowserRouter>
 )
