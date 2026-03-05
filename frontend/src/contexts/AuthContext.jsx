@@ -34,13 +34,12 @@ export const AuthProvider = ({children}) => {
         localStorage.clear()
         setUser(null)
     }
-
+    
     return (
         <AuthContext.Provider value={{ user, login, logout }}>
             {children}
         </AuthContext.Provider>
     )
-
 }
 
 export const useAuth = () => {

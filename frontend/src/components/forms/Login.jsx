@@ -56,9 +56,7 @@ function Login() {
 
   return (
     <div className="loginContainer">
-    
          <div className="loginCard">
-
            <h3 className="loginTitle">Welcome Back</h3>
            <p className="loginSubtitle">Login to continue to Whisper</p>
 
@@ -79,11 +77,9 @@ function Login() {
              </button>
 
              <p className="redirectRegister">Don't have an account? <span onClick={()=>navigate("/register")}>Create one</span></p>
-
            </form>
 
          </div>
-
        </div>
      )
 }
