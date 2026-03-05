@@ -114,12 +114,38 @@ class VerifyOtpAndCreateAccount(APIView):
 
         user_otp_object.delete()
 
-        serializer = AccountHolderSerializer(user)
-
-        return Response({"message":"OTP verified successfully.",
-                         "data":serializer.data
-                         },status=200)
+        return Response({"message":"OTP verified successfully."},status=200)
         
 
 
+# Login view
+from django.contrib.auth import authenticate
+from rest_framework_simplejwt.tokens import RefreshToken
+
+class LoginViewRefreshToken(APIView):
+    """
+    Class View for generating jwt tokens for user.
+    """
+    def post(self,request):
+        contact = request.data.get('contact')
+        password = request.data.get('password')
+
+        # authenticate user cred.
+        user = authenticate(contact = contact,password = password)
+
+        if not user:
+            return Response({"error":"invalid credentials"},status=401)
+        
+        # Generate token 
+        refresh = RefreshToken.for_user(user)
+
+        return Response({
+            "access":str(refresh.access_token),
+            "refresh":str(refresh),
+            "user":{
+                "username":user.username,
+                "contact":user.contact,
+                "status":user.status
+            }
+        })
 

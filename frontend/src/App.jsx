@@ -5,6 +5,7 @@ import BaseLayout from './layout/Base'
 
 import BrandIntro from './components/brand-intro/BrandIntro'
 import RegisterAccount from './components/forms/Register'
+import Login from './components/forms/Login'
 
 
 export default function App() {
@@ -15,6 +16,8 @@ export default function App() {
       <Route path='/' element={<BaseLayout/>}>
          <Route index element={<BrandIntro/>}/>
          <Route path = "register" element={<RegisterAccount/>}/>
+         <Route path = "login" element={<Login/>}/>
+
       </Route>
      
 
