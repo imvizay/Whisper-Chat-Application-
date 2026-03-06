@@ -36,7 +36,7 @@ function Login() {
     mutationFn:(data)=> authApi.login(data),
     onSuccess:(data)=>{
       login(data)
-      navigate('/')
+      navigate('/chat-dashboard')
       alert("user logged in.")
 
     },

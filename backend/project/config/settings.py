@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 import os 
+from datetime import timedelta
 
 # python dotenv config
 from dotenv import load_dotenv
@@ -50,7 +51,8 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
 
     'chat',
-    'users'
+    'users',
+    'friends'
 ]
 
 CORS_ALLOWED_ORIGINS = [
@@ -76,6 +78,25 @@ REST_FRAMEWORK = {
     )
    
 }
+
+# JWT CONFIG
+SIMPLE_JWT = {
+
+    # access token lifetime
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=120),
+
+    # refresh token lifetime
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+
+    # allow refresh token rotation
+    "ROTATE_REFRESH_TOKENS": True,
+
+
+    # header type
+    "AUTH_HEADER_TYPES": ("Bearer",),
+
+}
+
 
 # Auth Model
 AUTH_USER_MODEL = "users.AccountHolder"
