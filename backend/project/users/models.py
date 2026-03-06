@@ -57,3 +57,5 @@ class OtpVerification(models.Model):
     
     def __str__(self):
         return f"{self.contact} - {self.otp}"
+
+

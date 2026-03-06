@@ -10,13 +10,26 @@ export const api = axios.create({
 api.interceptors.request.use(
     
     (config)=>{
-        const token = localStorage.getItem("accessToken")
 
-        if(token){
-             config.headers ={
-                ...config.headers,
-                Authorization:`Bearer ${token}`
-             }
+        const stored = localStorage.getItem("authUser")
+
+        // skip login & refresh endpoints
+        if(config.url?.includes("/auth/login") || config.url?.includes("/token/refresh")){
+            return config
+        }
+
+
+        if(stored){
+
+            const token = JSON.parse(stored)
+
+            if(token?.access){
+                            config.headers = {
+                                  ...config.headers,
+                                  Authorization:`Bearer ${token.access}`
+                            }
+            }
+            
         }
         return config
 

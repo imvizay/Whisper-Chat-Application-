@@ -1,7 +1,10 @@
 
 from django.shortcuts import render
 from rest_framework.response import Response
+
+# CBVs
 from rest_framework.views import APIView
+
 import random
 
 # model
@@ -11,7 +14,7 @@ from users.models import AccountHolder
 from users.serializers import AccountHolderSerializer
 
 
-# otp services module import
+# services
 from users.services import send_sms_otp
 
 from users.models import OtpVerification
@@ -143,9 +146,11 @@ class LoginViewRefreshToken(APIView):
             "access":str(refresh.access_token),
             "refresh":str(refresh),
             "user":{
+                "id":user.id,
                 "username":user.username,
                 "contact":user.contact,
                 "status":user.status
             }
         })
+
 
