@@ -5,6 +5,7 @@ from users.models import AccountHolder
 
 # Serializer 
 from rest_framework import serializers
+from rest_framework.validators import ValidationError
 
 
 class UserSearchSerializer(serializers.ModelSerializer):
@@ -66,5 +67,40 @@ class Accept_Or_Reject_RequestSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = FriendRequest
-        fields = "__all__"
-        read_only_fields = ["created_at","reciever"]
+        fields = ['status']
+
+    def validate(self, attrs):
+        request = self.context["request"]
+
+        # only receiver can accpet.
+        if self.instance.reciever != request.user:
+            return ValidationError("You are not allowed to update this request.")
+        
+        if self.instance.status != "pending":
+            raise serializers.ValidationError(
+                "This request has already been processed."
+            )
+
+        return attrs
+    
+
+    def update(self, instance, validated_data):
+
+        new_status = validated_data.get("status")
+
+        instance.status = new_status
+        instance.save()
+
+        # create friendship if accepted
+        if new_status == "accepted":
+
+            Friendship.objects.get_or_create(
+                user_1=instance.sender,
+                user_2=instance.reciever
+            )
+
+        return instance
+
+        
+
+    
