@@ -1,0 +1,27 @@
+.chatLayoutWrapper{
+display:flex;
+height:100vh;
+width:100%;
+background:#120a24;
+overflow:hidden;
+}
+
+/* LEFT SIDEBAR */
+
+.chatSidebar{
+width:360px;
+border-right:1px solid rgba(255,255,255,0.05);
+background:#1a0f30;
+display:flex;
+flex-direction:column;
+}
+
+
+/* RIGHT CHAT WINDOW */
+
+.chatContentArea{
+flex:1;
+display:flex;
+flex-direction:column;
+overflow:hidden;
+}
