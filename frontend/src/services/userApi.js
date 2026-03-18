@@ -18,7 +18,9 @@ export const friendReqApi = {
     requestReceived : () => http.get('friends/requests-recieved/'),
 
     // Friend request accept or reject
-    acceptOrRejectFreindRequest : (data) => http.post(url,data), 
+    acceptOrRejectFreindRequest : (data) => http.put(`friends/request-action/${data.id}/`,{
+        status:data.status
+    }), 
 
     // unfriend : (data) => http.post('',data), 
     // blockFriend : (data) => http.post('',data) 
