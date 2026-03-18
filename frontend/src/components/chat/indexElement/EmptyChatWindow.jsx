@@ -46,18 +46,19 @@ function EmptyChatWindow() {
     const sendFriendReqMutation = useMutation({
       mutationFn : (recieverId) => friendReqApi.addFriend(recieverId),
 
-      onSuccess : (data,recieverId) => {
-        console.log("Friends Request has sent successfully.")
-       
-        queryClient.setQueryData("searchFriends",query),(oldData)=>{
-          if(!oldData) return
-        }
-
-        return oldData.map((user)=>{
-            user.id == recieverId ? {...user,status:"pending"} : user
-        })
+      onSuccess: (data, recieverId) => {
+        console.log("Friend request sent successfully");
+        queryClient.setQueryData("searchFriends", (oldData) => {
+            if (!oldData) return oldData;
+        
+          return oldData.map((user) =>
+              user.id === recieverId
+                ? { ...user, status: "pending" }
+                : user
+            )
+          })
       },
-      
+
       onError : (error) => {
         console.log(error)
       }
