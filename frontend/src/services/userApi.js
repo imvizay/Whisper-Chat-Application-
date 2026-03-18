@@ -5,7 +5,7 @@ import { http } from "./shared-api/httpRequest";
 
 export const friendReqApi = {
 
-    loadFriendList : () => http.get(''),  
+    loadFriendList : () => http.get('fetch-friends/'),  
     // Search users.
     searchFriend : (data) => http.get(`friends/search-friends/?query=${data}`),  
 

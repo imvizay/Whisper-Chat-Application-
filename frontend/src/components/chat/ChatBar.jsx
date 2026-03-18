@@ -13,7 +13,7 @@ import { Handshake , MessagesSquare, User , Bell, SettingsIcon } from 'lucide-re
 
 const INITIAL_FEATURES = [ 
   {icon:MessagesSquare, name:'chats',         isActive:true  , path:''  },
-  {icon:User,           name:'friends',       isActive:false , path:'friendsList'  },
+  {icon:User,           name:'friends',       isActive:false , path:'friends-list'  },
   {icon:Bell,           name:'notifications', isActive:false , isNotificationIcon:true, path:'notifications' },
   {icon:SettingsIcon,   name:'settings',      isActive:false , path: 'settings' },
 ]

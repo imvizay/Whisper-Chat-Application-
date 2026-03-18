@@ -12,6 +12,7 @@ import ChatLayout from './layout/ChatLayout'
 // import ChatWindow from './components/chat/ChatWindow'
 import EmptyChatWindow from './components/chat/indexElement/EmptyChatWindow'
 import NotificationPanel from './components/chat/NotificationPanel'
+import FriendsPanel from './components/chat/FriendsPanel'
 
 
 export default function App() {
@@ -30,6 +31,8 @@ export default function App() {
 
         {/* <Route path=":userId" element = {<ChatWindow/>}/> */}
         <Route path='notifications' element={<NotificationPanel/>}/>
+        <Route path='friends-list' element={<FriendsPanel/>}/>
+
 
       </Route>
      

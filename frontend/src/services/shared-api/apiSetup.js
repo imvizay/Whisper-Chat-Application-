@@ -14,7 +14,12 @@ api.interceptors.request.use(
         const stored = localStorage.getItem("authUser")
 
         // skip login & refresh endpoints
-        if(config.url?.includes("/auth/login") || config.url?.includes("/token/refresh")){
+        if( config.url?.includes("/auth/login") || 
+            config.url?.includes("/token/refresh") || 
+            config.url?.includes("/auth/send-otp") || 
+            config.url?.includes("/auth/verify-otp") 
+
+        ){
             return config
         }
 

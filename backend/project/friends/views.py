@@ -73,3 +73,9 @@ class LoadFriendRequestReceived(ListAPIView):
 class Accept_Or_Reject_Request(UpdateAPIView):
     queryset = FriendRequest.objects.all()
     serializer_class = Accept_Or_Reject_RequestSerializer
+
+
+
+class GetFriendsList(ListAPIView):
+    queryset = Friendship.objects.all()
+    serializer_class = FriendshipListSerializer
