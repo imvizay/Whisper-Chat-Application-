@@ -4,30 +4,11 @@ import '../../assets/css/chat_dashboard/friends-list.css'
 // api fn
 import { friendReqApi } from '../../services/userApi'
 
-// custom static data
-const friendsData = [
-  {
-    id: 1,
-    name: "Rahul Sharma",
-    phone: "+91 9876543210",
-    avatar: "https://i.pravatar.cc/150?img=1",
-  },
-  {
-    id: 2,
-    name: "Anjali Verma",
-    phone: "+91 9123456780",
-    avatar: "https://i.pravatar.cc/150?img=5",
-  },
-  {
-    id: 3,
-    name: "Amit Patel",
-    phone: "+91 9988776655",
-    avatar: "https://i.pravatar.cc/150?img=8",
-  },
-]
-
 // tanstack query
 import { useQuery } from '@tanstack/react-query'
+
+// usenavigate
+import { useNavigate } from 'react-router-dom'
 
 
 function FriendsPanel() {
@@ -37,24 +18,33 @@ function FriendsPanel() {
     queryFn: () => friendReqApi.loadFriendList()
   }) 
 
+  const navigate = useNavigate()
+
   if (isLoading) return <p>Loading Friends ...</p>
   if(isError) return <p>Error loading friends list.</p>
 
 
 
   return (
-    <div className="friends-container">
+    <div className={`friends-container`}>
       <h2 className="title">Your Friends</h2>
 
       <div className="friends-list">
-        {friendsData.map((friend) => (
-          <div key={friend.id} className="friend-item">
+        {friends.map((friend) => (
+          <div 
+            key={friend.id} className="friend-item"
             
-            <img src={friend.avatar} alt={friend.name} />
+            onClick={ () => 
+              navigate(`/chat-dashboard/${friend.id}`,{
+              state:friend
+            })}
+          >
+            
+            <span className='usernameLogo'>{friend.username.charAt(0).toUpperCase()}</span> 
 
             <div className="friend-details">
-              <h4>{friend.name}</h4>
-              <p>{friend.phone}</p>
+              <h4>{friend.username}</h4>
+              <p>{friend.contact}</p>
             </div>
 
           </div>

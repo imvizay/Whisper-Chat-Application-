@@ -1,56 +1,120 @@
+/* Base container */
 .friends-container {
   width: 100%;
-  margin: auto;
-  padding: 20px;
-  background: #f8fafc;
   height: 100vh;
+  padding: 24px;
+  background: #020617; /* dark theme to match sidebar */
+  color: #fff;
+  overflow-y: auto;
 }
 
+/* Title */
 .title {
   font-size: 22px;
   font-weight: 600;
   margin-bottom: 20px;
+  color: #e2e8f0;
 }
 
 /* List */
 .friends-list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
-/* Friend Item */
+/* Friend Card */
 .friend-item {
   display: flex;
   align-items: center;
-  gap: 12px;
-  background: white;
-  padding: 12px;
-  border-radius: 10px;
-  transition: 0.2s;
+  gap: 14px;
+  padding: 14px;
+  border-radius: 14px;
+  background: #0f172a;
+  border: 1px solid transparent;
+  transition: all 0.25s ease;
   cursor: pointer;
-  border: 1px solid #e2e8f0;
 }
 
 .friend-item:hover {
-  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  background: #1e293b;
+  border-color: #334155;
+  transform: translateY(-2px);
 }
 
 /* Avatar */
-.friend-item img {
-  width: 45px;
+.usernameLogo {
   height: 45px;
+  width: 45px;
+  min-width: 45px;
   border-radius: 50%;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 16px;
+  color: #fff;
 }
 
 /* Details */
+.friend-details {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
 .friend-details h4 {
   margin: 0;
   font-size: 15px;
+  font-weight: 500;
+  color: #f1f5f9;
 }
 
 .friend-details p {
   margin: 2px 0 0;
   font-size: 13px;
-  color: #64748b;
+  color: #94a3b8;
+}
+
+
+
+/* VARIANT SUPPORT */
+
+/* FULL PAGE (default) */
+.friends-container.fullPage {
+  padding: 24px;
+}
+
+/* SMALL PANEL (sidebar-like version) */
+.friends-container.smallPage {
+  padding: 0px;
+  background: transparent;
+}
+
+.friends-container.smallPage h2{
+    display: none;
+}
+.smallPage .title {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.smallPage .friend-item {
+  padding: 10px;
+  border-radius: 10px;
+}
+
+.smallPage .usernameLogo {
+  height: 36px;
+  width: 36px;
+  font-size: 14px;
+}
+
+.smallPage .friend-details h4 {
+  font-size: 13px;
+}
+
+.smallPage .friend-details p {
+  font-size: 11px;
 }

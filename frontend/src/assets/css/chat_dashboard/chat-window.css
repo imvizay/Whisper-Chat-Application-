@@ -1,376 +1,152 @@
-.chatWindowWrapper{
-height:100vh;
-display:flex;
-flex-direction:column;
-background:linear-gradient(180deg,#1e1236,#140b25);
-color:white;
-font-family:sans-serif;
+.chatWindowContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: #020617;
+  color: #fff;
 }
 
-
-/* TOP BAR */
-
-.windowTopBar{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:12px 18px;
-background:#24143d;
-border-bottom:1px solid rgba(255,255,255,0.05);
+/* Header */
+.chatHeader {
+  padding: 12px 16px;
+  border-bottom: 1px solid #1e293b;
 }
 
-.chatUserInfo{
-display:flex;
-align-items:center;
-gap:12px;
+.chatUserInfo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-.chatUserAvatar{
-width:40px;
-height:40px;
-border-radius:50%;
+.chatAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
 }
 
-.chatUserMeta{
-display:flex;
-flex-direction:column;
+.avatarWrapper {
+  position: relative;
 }
 
-.chatUserName{
-margin:0;
-font-size:14px;
+.onlineDot {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 10px;
+  height: 10px;
+  background: #22c55e;
+  border-radius: 50%;
 }
 
-.chatUserStatus{
-font-size:12px;
-opacity:.7;
+.statusText {
+  font-size: 12px;
+  color: #22c55e;
 }
 
-.onlineStatus{
-color:#4ade80;
+/* Messages */
+.chatMessages {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
-.typingStatus{
-color:#a78bfa;
+/* Message Bubble */
+.messageBubble {
+  max-width: 60%;
+  padding: 10px 12px;
+  border-radius: 12px;
+  font-size: 14px;
 }
 
-.chatTopActions{
-display:flex;
-gap:12px;
+.messageBubble.incoming {
+  background: #1e293b;
+  align-self: flex-start;
 }
 
-.topActionBtn{
-background:none;
-border:none;
-color:white;
-font-size:16px;
-cursor:pointer;
+.messageBubble.outgoing {
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  align-self: flex-end;
 }
 
-
-/* CHAT BODY */
-
-.chatBody{
-flex:1;
-padding:20px;
-overflow-y:auto;
-display:flex;
-flex-direction:column;
-gap:16px;
+/* Meta */
+.messageMeta {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  font-size: 11px;
+  margin-top: 4px;
+  color: #cbd5f5;
 }
 
-.chatDateSeparator{
-display:flex;
-justify-content:center;
+/* Status */
+.status {
+  font-size: 12px;
 }
 
-.chatDateSeparator span{
-font-size:12px;
-opacity:.6;
-background:#24143d;
-padding:4px 12px;
-border-radius:20px;
+.status.seen {
+  color: #22c55e;
 }
 
-
-/* FRIEND MESSAGE */
-
-.friendMessageWrapper{
-display:flex;
-gap:10px;
-align-items:flex-end;
+/* Typing */
+.typingIndicator {
+  display: flex;
+  gap: 4px;
+  padding: 6px 10px;
+  background: #1e293b;
+  width: fit-content;
+  border-radius: 10px;
 }
 
-.friendAvatar{
-width:30px;
-height:30px;
-border-radius:50%;
+.typingIndicator span {
+  width: 6px;
+  height: 6px;
+  background: #94a3b8;
+  border-radius: 50%;
+  animation: blink 1.4s infinite;
 }
 
-.friendMessageBubble{
-background:#2a1a4d;
-padding:10px 14px;
-border-radius:12px;
-max-width:260px;
-font-size:13px;
+.typingIndicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.typingIndicator span:nth-child(3) {
+  animation-delay: 0.4s;
 }
 
-.messageTime{
-font-size:10px;
-opacity:.6;
-display:block;
-margin-top:4px;
+@keyframes blink {
+  0%, 80%, 100% { opacity: 0; }
+  40% { opacity: 1; }
 }
 
-
-/* MY MESSAGE */
-
-.myMessageWrapper{
-display:flex;
-justify-content:flex-end;
+/* Input */
+.chatInputArea {
+  display: flex;
+  padding: 10px;
+  border-top: 1px solid #1e293b;
+  gap: 10px;
 }
 
-.myMessageBubble{
-background:#7c3aed;
-padding:10px 14px;
-border-radius:12px;
-max-width:260px;
-font-size:13px;
+.chatInputArea input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: #1e293b;
+  color: #fff;
 }
 
-.messageMeta{
-display:flex;
-align-items:center;
-justify-content:flex-end;
-gap:6px;
-margin-top:4px;
+.chatInputArea button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 10px;
+  background: #4f46e5;
+  color: #fff;
+  cursor: pointer;
 }
 
-.messageStatus{
-font-size:11px;
-opacity:.8;
-}
-
-
-/* TYPING INDICATOR */
-
-.typingIndicatorWrapper{
-display:flex;
-gap:10px;
-align-items:center;
-}
-
-.typingBubble{
-display:flex;
-gap:4px;
-background:#2a1a4d;
-padding:8px 10px;
-border-radius:12px;
-}
-
-.typingBubble span{
-width:6px;
-height:6px;
-background:white;
-border-radius:50%;
-opacity:.6;
-animation:typing 1.4s infinite;
-}
-
-.typingBubble span:nth-child(2){
-animation-delay:.2s;
-}
-
-.typingBubble span:nth-child(3){
-animation-delay:.4s;
-}
-
-@keyframes typing{
-0%{opacity:.2}
-50%{opacity:1}
-100%{opacity:.2}
-}
-
-
-/* INPUT BAR */
-
-.chatInputMessageModal{
-display:flex;
-align-items:center;
-gap:10px;
-padding:12px;
-background:#1c0f33;
-}
-
-.chatMessageInput{
-flex:1;
-padding:10px 12px;
-border-radius:20px;
-border:none;
-outline:none;
-background:#2a1a4d;
-color:white;
-}
-
-.inputActionBtn{
-background:none;
-border:none;
-color:white;
-font-size:18px;
-cursor:pointer;
-}
-
-.sendMessageBtn{
-background:#7c3aed;
-border:none;
-width:36px;
-height:36px;
-border-radius:50%;
-color:white;
-cursor:pointer;
-font-size:16px;
-}
-
-
-/* MEDIA QUERY */
-
-/* ===============================
-   mobile (480px and below)
-================================ */
-
-@media (max-width:480px){
-
-.chatWindowWrapper{
-height:100%;
-}
-
-/* TOP BAR */
-.windowTopBar{
-padding:10px 12px;
-}
-
-.chatUserAvatar{
-width:34px;
-height:34px;
-}
-
-.chatUserName{
-font-size:13px;
-}
-
-.chatUserStatus{
-font-size:11px;
-}
-
-.topActionBtn{
-font-size:14px;
-}
-
-/* CHAT BODY */
-.chatBody{
-padding:14px;
-gap:12px;
-}
-
-/* MESSAGE BUBBLES */
-.friendMessageBubble,
-.myMessageBubble{
-max-width:70%;
-font-size:12px;
-padding:8px 10px;
-}
-
-
-/* DATE SEPARATOR */
-.chatDateSeparator span{
-font-size:11px;
-padding:3px 10px;
-}
-
-/* INPUT BAR */
-.chatInputMessageModal{
-padding:10px;
-gap:8px;
-}
-
-.chatMessageInput{
-padding:8px 10px;
-font-size:13px;
-}
-
-.sendMessageBtn{
-width:32px;
-height:32px;
-font-size:14px;
-}
-
-.inputActionBtn{
-font-size:16px;
-}
-
-}
-
-
-/* ===============================
-   small mobile (360px and below)
-================================ */
-
-@media (max-width:360px){
-
-.windowTopBar{
-padding:8px 10px;
-}
-
-.chatUserAvatar{
-width:30px;
-height:30px;
-}
-
-.chatUserName{
-font-size:12px;
-}
-
-.chatUserStatus{
-font-size:10px;
-}
-
-
-/* CHAT BODY */
-.chatBody{
-padding:10px;
-gap:10px;
-}
-
-
-/* MESSAGE BUBBLES */
-.friendMessageBubble,
-.myMessageBubble{
-max-width:75%;
-font-size:11px;
-padding:7px 9px;
-}
-
-
-/* MESSAGE TIME */
-.messageTime{
-font-size:9px;
-}
-
-
-/* INPUT AREA */
-.chatMessageInput{
-font-size:12px;
-padding:7px 9px;
-}
-
-.sendMessageBtn{
-width:30px;
-height:30px;
-font-size:13px;
-}
-
-.inputActionBtn{
-font-size:14px;
-}
-
+.chatInputArea button:hover {
+  background: #6366f1;
 }

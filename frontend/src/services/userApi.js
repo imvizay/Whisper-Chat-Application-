@@ -5,7 +5,7 @@ import { http } from "./shared-api/httpRequest";
 
 export const friendReqApi = {
 
-    loadFriendList : () => http.get('fetch-friends/'),  
+    loadFriendList : () => http.get('friends/friend-list/'),  
     // Search users.
     searchFriend : (data) => http.get(`friends/search-friends/?query=${data}`),  
 
@@ -25,6 +25,11 @@ export const friendReqApi = {
     // unfriend : (data) => http.post('',data), 
     // blockFriend : (data) => http.post('',data) 
 } 
+
+export const chatsFriends = {
+    fetchNewFriends : () => http.get('friends/new-friends/'),
+    fetchRecentChats : () => http.get('friends/recent-chats/')
+}
 
 const userProfileApi = {
     updateProfile : (id) => http.post(`${id}`),
