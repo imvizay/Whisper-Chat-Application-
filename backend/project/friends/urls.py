@@ -1,8 +1,7 @@
 
 from django.urls import path
-from friends.views import SearchUsersView , CreateFriendRequest , LoadFriendRequestReceived , Accept_Or_Reject_Request , GetFriendsList
+from friends.views import SearchUsersView , CreateFriendRequest , LoadFriendRequestReceived , Accept_Or_Reject_Request
 urlpatterns = [
-    path('fetch-friends/',GetFriendsList.as_view()),
     path('search-friends/',SearchUsersView.as_view()),
     path('add-friends/',CreateFriendRequest.as_view()) ,
     path('requests-recieved/',LoadFriendRequestReceived.as_view()),
