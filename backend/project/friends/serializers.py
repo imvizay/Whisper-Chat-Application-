@@ -101,6 +101,30 @@ class Accept_Or_Reject_RequestSerializer(serializers.ModelSerializer):
 
         return instance
 
-        
 
+# serializers.py
+
+from rest_framework import serializers
+from .models import Friendship
+
+class FriendListSerializer(serializers.ModelSerializer):
+    id = serializers.SerializerMethodField()
+    contact = serializers.SerializerMethodField()
+    username = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Friendship
+        fields = ["id", "contact","username"]
+
+    def get_friend(self,obj):
+        user = self.context["request"].user
+        return  obj.user_2 if obj.user_1 == user else obj.user_1
     
+    def get_id(self,obj):
+        return self.get_friend(obj).id
+    
+    def get_username(self,obj):
+        return self.get_friend(obj).username
+    
+    def get_contact(self,obj):
+        return self.get_friend(obj).contact

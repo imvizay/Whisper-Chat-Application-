@@ -16,7 +16,8 @@ from rest_framework.permissions import IsAuthenticated
 from friends.serializers import ( UserSearchSerializer, 
                                   CreateFriendRequestSerializer , 
                                   Accept_Or_Reject_RequestSerializer,
-                                  FriendRequestSerializer )
+                                  FriendRequestSerializer,
+                                  FriendListSerializer )
 
 
 
@@ -75,7 +76,15 @@ class Accept_Or_Reject_Request(UpdateAPIView):
     serializer_class = Accept_Or_Reject_RequestSerializer
 
 
+class FriendListView(ListAPIView):
+   
+    serializer_class = FriendListSerializer
 
-class GetFriendsList(ListAPIView):
-    queryset = Friendship.objects.all()
-    serializer_class = FriendshipListSerializer
+    def get_queryset(self):
+        user = self.request.user
+
+        return (
+            Friendship.objects.filter(
+                                      Q(user_1=user) | Q(user_2=user)
+                                      ).select_related("user_1","user_2")
+        )

@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom'
 
 // icons lucide-react
 import { Handshake , MessagesSquare, User , Bell, SettingsIcon } from 'lucide-react'
+import RecentChatList from "./RecentChats";
 
 
 const INITIAL_FEATURES = [ 
@@ -80,60 +81,7 @@ function ChatBar() {
 
       {/* Recent Chats */}
       <div className="recentChatsContainer">
-
-        <div className="recentChatCard activeChat">
-
-          <img
-            src="https://i.pravatar.cc/40?img=5"
-            alt="user"
-            className="chatAvatar"
-          />
-
-          <div className="friendInfo">
-            <h5>Alex Rivera</h5>
-            <p className="typingStatus">Typing...</p>
-          </div>
-
-          <span className="chatTime">12:45 PM</span>
-
-        </div>
-
-        <div className="recentChatCard">
-
-          <img
-            src="https://i.pravatar.cc/40?img=10"
-            alt="user"
-            className="chatAvatar"
-          />
-
-          <div className="friendInfo">
-            <h5>Sarah Chen</h5>
-            <p>The design looks amazing!</p>
-          </div>
-
-          <span className="chatTime">Yesterday</span>
-
-          <span className="unreadBadge">2</span>
-
-        </div>
-
-        <div className="recentChatCard">
-
-          <img
-            src="https://i.pravatar.cc/40?img=12"
-            alt="user"
-            className="chatAvatar"
-          />
-
-          <div className="friendInfo">
-            <h5>Marc Specter</h5>
-            <p>Let's catch up later.</p>
-          </div>
-
-          <span className="chatTime">Monday</span>
-
-        </div>
-
+        <RecentChatList/>
       </div>
 
     </aside>
