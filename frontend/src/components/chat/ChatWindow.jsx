@@ -1,17 +1,95 @@
-import React, { useState } from "react";
-import "../../assets/css/chat_dashboard/chat-window.css";
-
-import { useLocation } from "react-router-dom";
+import { BASEURL_DEV } from "../../services/shared-api/apiSetup"
+import { useState, useRef, useEffect } from "react"
+import "../../assets/css/chat_dashboard/chat-window.css"
+import { useQueryClient, useQuery } from "@tanstack/react-query"
+import { useLocation } from "react-router-dom"
 
 function ChatWindow() {
-  const [message, setMessage] = useState("");
-
-  const location  = useLocation()
+  const location = useLocation()
   const friend = location?.state
 
-  const isTyping = true; // simulate typing
+  const chatId = friend?.chat_id
+  const userId = friend?.current_user_id
+  const receiverId = friend?.id
 
-  
+  const [input, setInput] = useState("")
+  const [socket, setSocket] = useState(null)
+  const [isConnected, setIsConnected] = useState(false)
+
+  const queryClient = useQueryClient()
+  const messagesEndRef = useRef(null)
+
+  // Fetch chat history
+  const fetchMessages = async () => {
+    const res = await fetch(`${BASEURL_DEV}/chat/${chatId}/messages/`)
+    return res.json()
+  }
+
+  const { data: messages = [] } = useQuery({
+    queryKey: ["chatMessages", chatId],
+    queryFn: fetchMessages,
+    enabled: !!chatId,
+  })
+
+  // WebSocket connection
+  useEffect(() => {
+    if (!chatId) return
+
+    const ws = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${chatId}/`)
+
+    ws.onopen = () => {
+      console.log("Connected to chat")
+      setIsConnected(true)
+    }
+
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data)
+
+      if (data.message) {
+        queryClient.setQueryData(["chatMessages", chatId], (old = []) => [
+          ...old,
+          data,
+        ])
+      }
+    }
+
+    ws.onclose = () => {
+      console.log("Disconnected")
+      setIsConnected(false)
+    }
+
+    setSocket(ws)
+
+    return () => {
+      ws.close()
+    }
+  }, [chatId, queryClient])
+
+  // send message safely
+  const sendMessage = () => {
+    if (!input.trim()) return
+
+    if (!socket || socket.readyState !== WebSocket.OPEN) {
+      console.log("Socket not ready")
+      return
+    }
+
+    const payload = {
+      message: input,
+      receiver_id: receiverId,
+      sender_id: userId,
+    }
+
+    socket.send(JSON.stringify(payload))
+
+    setInput("")
+  }
+
+  // Auto scroll
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+  }, [messages])
+
   return (
     <div className="chatWindowContainer">
 
@@ -19,48 +97,56 @@ function ChatWindow() {
       <div className="chatHeader">
         <div className="chatUserInfo">
           <div className="avatarWrapper">
-            <img
-              src="https://i.pravatar.cc/40"
-              alt="user"
-              className="chatAvatar"
-            />
-            <span className="onlineDot"></span>
+            <span className="chatAvatar">
+              {friend?.username?.charAt(0).toUpperCase()}
+            </span>
           </div>
 
           <div>
             <h4>{friend?.username?.toUpperCase() || "User"}</h4>
-            <p className="statusText">Online</p>
+            <p className="statusText">
+              {isConnected ? "Online" : "Connecting..."}
+            </p>
           </div>
         </div>
       </div>
 
       {/* Messages */}
       <div className="chatMessages">
+        {messages.map((msg, index) => {
+          const isMe = msg.sender_id === userId
+        
+          return (
+            <div
+              key={index}
+              className={`messageRow ${isMe ? "myMessage" : "theirMessage"}`}
+            >
+              <div className="messageBubble">
+                {msg.message || msg.content}
+              </div>
+            </div>
+          )
+        })}
 
-       
-        {/* Typing Indicator */}
-        {isTyping && (
-          <div className="typingIndicator">
-            <span></span><span></span><span></span>
-          </div>
-        )}
-
+        <div ref={messagesEndRef}></div>
       </div>
 
       {/* Input */}
       <div className="chatInputArea">
         <input
           type="text"
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          onKeyDown={(e) => e.key === "Enter" && sendMessage()}
           placeholder="Type a message..."
-      
-          
         />
 
-        <button>Send</button>
+        <button onClick={sendMessage} disabled={!isConnected}>
+          Send
+        </button>
       </div>
-
     </div>
-  );
+  )
 }
 
-export default ChatWindow;
+export default ChatWindow
