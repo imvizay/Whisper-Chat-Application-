@@ -1,7 +1,7 @@
 // control room for api
 import axios from 'axios'
 
-const BASEURL_DEV = `http://127.0.0.1:8000/api`; // backned url
+export const BASEURL_DEV = `http://127.0.0.1:8000/api`; // backned url
 
 export const api = axios.create({
     baseURL:BASEURL_DEV

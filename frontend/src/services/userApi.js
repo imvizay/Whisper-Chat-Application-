@@ -27,6 +27,9 @@ export const friendReqApi = {
 } 
 
 export const chatsFriends = {
+
+    openChat: (currentUserId,friendId) => http.get(`friends/get-chat/?user_1=${currentUserId}&user_2=${friendId}`),
+
     fetchNewFriends : () => http.get('friends/new-friends/'),
     fetchRecentChats : () => http.get('friends/recent-chats/')
 }

@@ -52,7 +52,8 @@ INSTALLED_APPS = [
 
     'chat',
     'users',
-    'friends'
+    'friends',
+    "channels"
 ]
 
 CORS_ALLOWED_ORIGINS = [
@@ -71,6 +72,19 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+ASGI_APPLICATION = "config.asgi.application"
+WSGI_APPLICATION = None
+# REDIS CONFIG
+
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}
 
 REST_FRAMEWORK = {
    

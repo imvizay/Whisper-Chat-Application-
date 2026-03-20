@@ -1,7 +1,7 @@
 /* Base container */
 .friends-container {
   width: 100%;
-  height: 100vh;
+  height: 100%;
   padding: 24px;
   background: #020617; /* dark theme to match sidebar */
   color: #fff;
@@ -81,12 +81,10 @@
 
 /* VARIANT SUPPORT */
 
-/* FULL PAGE (default) */
 .friends-container.fullPage {
   padding: 24px;
 }
 
-/* SMALL PANEL (sidebar-like version) */
 .friends-container.smallPage {
   padding: 0px;
   background: transparent;
