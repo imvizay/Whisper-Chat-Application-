@@ -26,18 +26,16 @@ def get_or_create_chat(request):
     })
 
 
-from rest_framework.decorators import api_view
-from rest_framework.response import Response
-from .models import Message
 
 @api_view(["GET"])
 def get_chat_messages(request, chat_id):
-    messages = Message.objects.filter(chat_id=chat_id).order_by("timestamp")
+    messages = Message.objects.filter(chat=chat_id).order_by("timestamp")
 
     data = [
         {
             "id": message.id,
             "message": message.content,
+            "status":message.status,
             "sender_id": message.sender.id,
             "timestamp": message.timestamp,
         }

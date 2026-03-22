@@ -6,6 +6,7 @@ import { BASEURL_DEV } from '../../services/shared-api/apiSetup'
 
 // api fn
 import { friendReqApi } from '../../services/userApi'
+import { getChatHistory } from '../../services/chatsApi'
 
 // tanstack query
 import { useQuery } from '@tanstack/react-query'
@@ -18,31 +19,45 @@ import { useAuth } from '../../contexts/AuthContext'
 
 
 
+
+
 function FriendsPanel() {
   const {user} = useAuth()
-  const {data:friends,isLoading,isError} = useQuery({
+
+  // Get All Friends In A List.
+  const {
+    data:friends,
+    isLoading,
+    isError
+  } = useQuery({
     queryKey:["friendlist"],
     queryFn: () => friendReqApi.loadFriendList()
   }) 
 
   const navigate = useNavigate()
 
-  if (isLoading) return <p>Loading Friends ...</p>
-  if(isError) return <p>Error loading friends list.</p>
+  if (isLoading) 
+    return <p>Loading Friends ...</p>
+  if(isError) 
+    return <p>Error loading friends list.</p>
+
 
   console.log("current user id :",user?.id)
   
+
+  // Get Or Create Chat Between Current User And Friend. 
   const openChat = async (friend) => {
     try {
       const res = await fetch(
-        `${BASEURL_DEV}/get-chat/?user1=${user?.id}&user2=${friend.id}`
+        `${BASEURL_DEV}${getChatHistory.getChats(user?.id, friend?.id)}`
       )
 
-      const data = await res.json();
+      const data = await res.json()
 
       navigate(`/chat-dashboard/${user?.id}`, {
         state: {
           ...friend,
+          friend_id:friend.id,
           chat_id: data.chat_id,
           current_user_id: user?.id,
         },
