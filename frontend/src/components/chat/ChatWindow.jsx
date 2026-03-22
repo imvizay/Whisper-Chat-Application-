@@ -4,6 +4,11 @@ import "../../assets/css/chat_dashboard/chat-window.css"
 import { useQueryClient, useQuery } from "@tanstack/react-query"
 import { useLocation } from "react-router-dom"
 
+// websocket url
+import { getWebSocketUrl } from "../../services/chatsApi"
+// icons 
+import { Check, CheckCheck, Eye } from "lucide-react"
+
 function ChatWindow() {
   const location = useLocation()
   const friend = location?.state
@@ -13,10 +18,14 @@ function ChatWindow() {
   const receiverId = friend?.id
 
   const [input, setInput] = useState("")
-  const [socket, setSocket] = useState(null)
-  const [isConnected, setIsConnected] = useState(false)
+  const [userStatus, setUserStatus] = useState({
+    isOnline:false,
+    lastSeen:null
+  })
 
   const queryClient = useQueryClient()
+
+  const socketRef = useRef(null)
   const messagesEndRef = useRef(null)
 
   // Fetch chat history
@@ -25,65 +34,117 @@ function ChatWindow() {
     return res.json()
   }
 
+  // Chat History Record
   const { data: messages = [] } = useQuery({
     queryKey: ["chatMessages", chatId],
     queryFn: fetchMessages,
     enabled: !!chatId,
+    staleTime:Infinity,
   })
 
   // WebSocket connection
   useEffect(() => {
     if (!chatId) return
+    const ws = new WebSocket(getWebSocketUrl(chatId))
 
-    const ws = new WebSocket(`ws://127.0.0.1:8000/ws/chat/${chatId}/`)
-
+    // when connection open.
     ws.onopen = () => {
-      console.log("Connected to chat")
-      setIsConnected(true)
+      console.log("connected to websocket")
     }
 
+    // when event fire up or message comes from backend
     ws.onmessage = (event) => {
+
       const data = JSON.parse(event.data)
+      console.log('recieved data:',data)
 
-      if (data.message) {
-        queryClient.setQueryData(["chatMessages", chatId], (old = []) => [
-          ...old,
-          data,
-        ])
+      if(data.type === "user_status"){
+
+        console.log("user status data:",data)
+        setUserStatus({
+          isOnline:data?.is_online,
+          lastSeen:data?.last_seen || null
+        })
+
+        return
       }
+
+      queryClient.setQueryData(
+        ["chatMessages",chatId],
+        ( oldData = []) => {
+          return [...oldData,data]
+        } )
+
     }
 
+
+
+    // web socket disconnected
     ws.onclose = () => {
-      console.log("Disconnected")
-      setIsConnected(false)
+  
+      // setIsConnected(false)
+      console.log("websocket disconnected")
+      setUserStatus({
+        isOnline:false,
+        lastSeen:null
+      })
     }
 
-    setSocket(ws)
+    // log error when websocket failed
+    ws.onerror = (error) =>{
+      console.error("websocket error",error)
+    }
+    
+    socketRef.current = ws
 
-    return () => {
+    // cleanup when component unmount remove connection.
+    return ()=> {
       ws.close()
     }
-  }, [chatId, queryClient])
 
-  // send message safely
+   }, [chatId, queryClient])
+
+ 
   const sendMessage = () => {
-    if (!input.trim()) return
 
-    if (!socket || socket.readyState !== WebSocket.OPEN) {
-      console.log("Socket not ready")
-      return
+    if(!input.trim()) return 
+
+    if(!socketRef || socketRef.current.readyState !== WebSocket.OPEN){
+      return console.log("error sending message to backend")
     }
 
     const payload = {
-      message: input,
-      receiver_id: receiverId,
-      sender_id: userId,
+      type:"message",
+      sender:userId,
+      receiver:friend?.id,
+      content:input,
+      status:"sent",
     }
 
-    socket.send(JSON.stringify(payload))
+    const tempData = {
+       id: Date.now(), // temp id
+       content: input,
+       sender: userId,
+       status: "sending",
+       timestamp: new Date().toISOString()
+    }
+
+    // OPTIMISTIC UI UPDATE
+
+    // queryClient.setQueryData(
+    //   ["chatMessages",chatId],
+    //   ( old = [] ) => {
+    //     return [...old,tempData]
+    //   })
+
+    // send message to backend
+    socketRef.current.send(JSON.stringify(payload))
 
     setInput("")
+   
   }
+
+  console.log(messages)
 
   // Auto scroll
   useEffect(() => {
@@ -105,7 +166,14 @@ function ChatWindow() {
           <div>
             <h4>{friend?.username?.toUpperCase() || "User"}</h4>
             <p className="statusText">
-              {isConnected ? "Online" : "Connecting..."}
+              { 
+                  userStatus.isOnline ? "Online" : 
+                  userStatus.lastSeen ? 
+                                  `last seen at ${new Date(userStatus.lastSeen).toLocaleTimeString([],{
+                                      hour:'2-digit',
+                                      minute:'2-digit'
+                                    })}`: "Offline" 
+              }
             </p>
           </div>
         </div>
@@ -113,16 +181,35 @@ function ChatWindow() {
 
       {/* Messages */}
       <div className="chatMessages">
-        {messages.map((msg, index) => {
+        {messages.map((msg) => {
           const isMe = msg.sender_id === userId
         
           return (
             <div
-              key={index}
+              key={msg.id}
               className={`messageRow ${isMe ? "myMessage" : "theirMessage"}`}
             >
               <div className="messageBubble">
                 {msg.message || msg.content}
+
+                <div className="meta">
+                  <span className="time">
+                    {new Date(msg.timestamp).toLocaleTimeString([], {
+                      hour: "2-digit",
+                      minute: "2-digit"
+                    })}
+                  </span>
+                  
+                 {msg.sender_id === userId && (
+                    <span className="status">
+                      {msg.status === "sent" && <Check/>}
+                      {msg.status === "delivered" && <CheckCheck/>}
+                      {msg.status === "seen" && <CheckCheck color="blue" size={12}/>}
+
+                      {msg.status === "watching" && <Eye/>}
+                    </span>
+                  )}
+                </div>
               </div>
             </div>
           )
@@ -141,7 +228,7 @@ function ChatWindow() {
           placeholder="Type a message..."
         />
 
-        <button onClick={sendMessage} disabled={!isConnected}>
+        <button onClick={sendMessage} disabled={!userStatus.isOnline}>
           Send
         </button>
       </div>
