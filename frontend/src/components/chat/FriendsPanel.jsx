@@ -33,7 +33,7 @@ function FriendsPanel() {
     queryKey:["friendlist"],
     queryFn: () => friendReqApi.loadFriendList()
   }) 
-
+console.log("friends:", friends)
   const navigate = useNavigate()
 
   if (isLoading) 
@@ -71,6 +71,7 @@ function FriendsPanel() {
 
   return (
     <div className={`friends-container`}>
+    
       <h2 className="title">Your Friends</h2>
 
       <div className="friends-list">

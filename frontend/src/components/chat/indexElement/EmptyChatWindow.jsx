@@ -4,6 +4,9 @@ import "../../../assets/css/chat_dashboard/empty_window/empty-chatwindow.css";
 // states 
 import { useState,useEffect } from "react";
 
+// icons
+import { MoveLeft } from "lucide-react";
+
 // api
 import { friendReqApi } from "../../../services/userApi";
 
@@ -11,12 +14,16 @@ import { friendReqApi } from "../../../services/userApi";
 import { useQueryClient } from "@tanstack/react-query";
 
 // tanstack mutation fn
-import { QueryClient, useMutation, useQuery } from "@tanstack/react-query";
+import {  useMutation, useQuery } from "@tanstack/react-query";
+
+// 
+import { useNavigate } from "react-router-dom";
 
 function EmptyChatWindow() {
     const [query,setQuery] = useState('')
     const queryClient = useQueryClient()
 
+    const navigate = useNavigate()
 
     // Persist Query Result After Refresh
     useEffect(()=>{
@@ -89,7 +96,9 @@ function EmptyChatWindow() {
 
   return (
     <div className="emptyChatWindow">
-
+       <button className="backBtn" onClick={()=>navigate('/chat-dashboard')}>
+          <MoveLeft size={18}/>
+        </button>
       {/* Header */}
       <div className="searchHeader">
         <h2>Find Friends</h2>

@@ -93,7 +93,7 @@ function NotificationPanel() {
 
           <h3 className="sectionTitle">New Messages</h3>
 
-          <div className="notificationCard messageCard">
+          {/* <div className="notificationCard messageCard">
             <div className="notificationInfo">
               <span className="userName">Ankit Verma</span>
               <span className="notificationText">
@@ -102,7 +102,7 @@ function NotificationPanel() {
             </div>
 
             <button className="openChatBtn">Open Chat</button>
-          </div>
+          </div> */}
 
         </div>
 
