@@ -15,7 +15,12 @@ function ChatLayout() {
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
-  const isChatScreen = location.pathname.includes("/chat-dashboard/chat/")
+   const isFullScreenRoute =
+            location.pathname.includes("/chat-dashboard/chat/") ||
+            location.pathname.includes("/chat-dashboard/notifications") ||
+            location.pathname.includes("/chat-dashboard/chats") || 
+            location.pathname.includes("/chat-dashboard/friends-list")
+
 
   const navigate = useNavigate()
 
@@ -23,7 +28,7 @@ function ChatLayout() {
     if (location.pathname === "/chat-dashboard") {
 
       if (isMobile) {
-        navigate("/chat-dashboard/friends-list")
+        navigate("/chat-dashboard")
       } else {
         navigate("/chat-dashboard/chats")
       }
@@ -36,7 +41,7 @@ function ChatLayout() {
     <div className="chatLayoutWrapper">
 
       {isMobile ? (
-        isChatScreen ? (
+        isFullScreenRoute ? (
           <Outlet />  
         ) : (
           <div className="mobileContainer">

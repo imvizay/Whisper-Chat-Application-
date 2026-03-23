@@ -11,7 +11,7 @@ import { useMutation } from '@tanstack/react-query'
 import { authApi } from '../../services/authApi'
 
 // auth hook
-import { useAuth } from '../../contexts/authContext'
+import { useAuth } from '../../contexts/AuthContext'
 
 function Login() {
   const [loginData,setLoginData] = useState({
@@ -34,8 +34,8 @@ function Login() {
 
   const sendLoginCredMutation = useMutation({
     mutationFn:(data)=> authApi.login(data),
-    onSuccess:(data)=>{
-      login(data)
+    onSuccess:(res)=>{
+      login(res)
       navigate('/chat-dashboard')
       alert("user logged in.")
 

@@ -267,8 +267,8 @@ function ChatWindow() {
                   
                  {msg.sender_id === userId && (
                     <span className="status">
-                      {msg.status === "sent" && <Check/>}
-                      {msg.status === "delivered" && <CheckCheck/>}
+                      {msg.status === "sent" && <Check size={12}/>}
+                      {msg.status === "delivered" && <CheckCheck size={12}/>}
                       {msg.status === "seen" && <CheckCheck color="blue" size={12}/>}
 
                       {msg.status === "watching" && <Eye/>}

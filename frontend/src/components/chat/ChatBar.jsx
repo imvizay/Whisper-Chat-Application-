@@ -29,6 +29,7 @@ function ChatBar() {
     return () => window.removeEventListener("resize", handleResize)
   }, [])
 
+
   // Active Feature logic 
   const getActiveFeature = (feature) => {
     const currentPath = location.pathname

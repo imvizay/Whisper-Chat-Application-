@@ -43,12 +43,43 @@ api.interceptors.request.use(
     (error) => Promise.reject(error)
 )
 
+
+//  retry request by making api call to refresh token in order to generate new access token using refresh token
 api.interceptors.response.use(
-    (res) => res.data,
-    (error)=>{
-        if(error.response?.status === 401){
-            console.log("token expire")
-        }
-        return Promise.reject(error)
+  (res) => res.data,
+
+  async (error) => {
+    const originalRequest = error.config
+
+    if (error.response?.status === 401 && !originalRequest._retry) {
+        console.log("401 Error Detected")
+      originalRequest._retry = true
+
+      try {
+        console.log("Running Refresh Token Api")
+        const raw = localStorage.getItem("authUser")
+        const refToken = JSON.parse(raw)
+
+        const res = await axios.post(`${BASEURL_DEV}/api/token/refresh/`, {
+          refresh: refToken
+        })
+
+        const newAccess = res.data.access
+        localStorage.setItem("access", newAccess)
+
+        console.log("Retrying Original Request with new token")
+
+        // update header
+        axios.defaults.headers.common["Authorization"] = `Bearer ${newAccess}`
+
+        // retry original request
+        return axios(originalRequest)
+
+      } catch (err) {
+        console.log("Refresh failed logout user")
+      }
     }
+
+    return Promise.reject(error)
+  }
 )

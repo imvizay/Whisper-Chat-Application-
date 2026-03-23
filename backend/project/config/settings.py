@@ -98,7 +98,7 @@ REST_FRAMEWORK = {
 SIMPLE_JWT = {
 
     # access token lifetime
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=600),
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=1),
 
     # refresh token lifetime
     "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
