@@ -50,6 +50,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
             )
 
         if hasattr(self, "user") and self.user.is_authenticated:
+            print("======================================")
+
+            print("SELF USER value ",self.user)
+            print("SELF USER ID Value ",self.user.id)
+
+            print("++++++++++++++++++++++++++++++++++++++++")
+
+
             await self.mark_offline(self.user)
 
             # Broadcast offline status
@@ -98,6 +106,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
             content
         )
 
+        # Check user online/offline
+        is_online = await self.is_user_online(receiver_id)
+
+        if is_online:
+         await self.update_message_status(message.id, "delivered")
+
+
         # Broadcast message
         await self.channel_layer.group_send(
             self.chat_room_name,
@@ -105,7 +120,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                 "type": "chat_message",
                 "id": message.id,
                 "content": message.content,
-                "sender_id": message.sender.id,
+                "sender_id": message.sender_id,
                 "timestamp": str(message.timestamp),
                 "status": message.status
             }
@@ -119,7 +134,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
             "type": "chat_message",
             "id": event["id"],
             "content": event["content"],  
-            "sender": event["sender_id"],
+            "sender_id": event["sender_id"],
             "status": event["status"],
             "timestamp": event["timestamp"],
         }))
@@ -137,6 +152,69 @@ class ChatConsumer(AsyncWebsocketConsumer):
             "last_seen": event.get("last_seen")
         }))
 
+    # ===============
+    # HANDLE SEEN
+    # ================
+    async def handle_seen(self, data):
+        message_id = data.get("message_id")
+
+        if not message_id:
+            return
+
+        await self.update_message_status(message_id, "seen")
+
+        # notify sender
+        await self.channel_layer.group_send(
+            self.chat_room_name,
+            {
+                "type": "message_seen_event",
+                "message_id": message_id,
+                "status": "seen"
+            }
+        )
+
+    async def message_seen_event(self, event):
+         await self.send(text_data=json.dumps({
+             "type": "message_seen",
+             "message_id": event["message_id"],
+             "status": event["status"]
+         }))
+
+    # HANDLE TYPING
+    async def handle_typing(self,data):
+        await self.channel_layer.group_send(
+            self.chat_room_name,
+            {
+                "type":"typing_event",
+                "user_id":self.user.id
+            }
+        )
+    # Handle Stop typing
+    async def handle_stop_typing(self,data):
+        await self.channel_layer.group_send(
+            self.chat_room_name,
+            {
+                "type":"stop_typing_event",
+                "user_id":self.user.id
+            }
+        )
+
+    # send typing event to frontend
+    async def typing_event(self,event):
+        await self.send(text_data=json.dumps({
+            "type":"typing",
+            "user_id":event["user_id"]
+        }))
+    
+    # Send stop typing event to frontend
+    async def stop_typing_event(self, event):
+        await self.send(text_data=json.dumps({
+            "type": "stop_typing",
+            "user_id": event["user_id"],
+        }))
+
+
+         
     # ========================
     # DB HELPERS
     # ========================
@@ -152,8 +230,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         )
 
     @sync_to_async
-    def mark_online(self, user):
-        status, _ = UserStatus.objects.get_or_create(user_id=user.id)
+    def mark_online(self, user_id):
+        status, _ = UserStatus.objects.get_or_create(user_id=user_id.id)
         status.is_online = True
         status.save()
 
@@ -163,3 +241,15 @@ class ChatConsumer(AsyncWebsocketConsumer):
         status.is_online = False
         status.last_seen = timezone.now()
         status.save()
+
+    @sync_to_async
+    def is_user_online(self,user_id):
+        try:
+            u = UserStatus.objects.get(id=user_id).is_online
+            return u
+        except:
+            return False
+        
+    @sync_to_async
+    def update_message_status(self, message_id, status):
+        Message.objects.filter(id=message_id).update(status=status)
