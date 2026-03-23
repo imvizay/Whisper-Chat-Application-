@@ -92,3 +92,75 @@
 .redirectRegister span:hover {
   text-decoration: underline;
 }
+
+
+/* MEDIA QUERY */
+
+@media (max-width: 480px) {
+
+  .loginContainer {
+    padding: 15px;
+  }
+
+  .loginCard {
+    padding: 22px;
+    border-radius: 12px;
+  }
+
+  .loginTitle {
+    font-size: 20px;
+  }
+
+  .loginSubtitle {
+    font-size: 13px;
+    margin-bottom: 18px;
+  }
+
+  .loginForm {
+    gap: 14px;
+  }
+
+  .fieldBlock label {
+    font-size: 13px;
+  }
+
+  .fieldBlock input {
+    padding: 9px 10px;
+    font-size: 13px;
+  }
+
+  .loginButton {
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .redirectRegister {
+    font-size: 12px;
+  }
+}
+
+
+@media (max-width: 360px) {
+
+  .loginCard {
+    padding: 18px;
+  }
+
+  .loginTitle {
+    font-size: 18px;
+  }
+
+  .loginSubtitle {
+    font-size: 12px;
+  }
+
+  .fieldBlock input {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  .loginButton {
+    padding: 9px;
+    font-size: 13px;
+  }
+}
