@@ -54,7 +54,7 @@ function FriendsPanel() {
 
       const data = await res.json()
 
-      navigate(`/chat-dashboard/${user?.id}`, {
+      navigate(`/chat-dashboard/chat/${friend.id}`, {
         state: {
           ...friend,
           friend_id:friend.id,
@@ -84,7 +84,7 @@ function FriendsPanel() {
             <span className='usernameLogo'>{friend.username.charAt(0).toUpperCase()}</span> 
 
             <div className="friend-details">
-              <h4>{friend.username}</h4>
+              <h4>{friend.username.charAt(0).toUpperCase() + friend.username.slice(1,friend.length) }</h4>
               <p>{friend.contact}</p>
             </div>
 

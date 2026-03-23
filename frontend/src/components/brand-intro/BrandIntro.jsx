@@ -1,6 +1,8 @@
 import React from 'react'
 import '../../assets/css/brand-intro.css'
+import { useNavigate } from 'react-router-dom'
 function BrandIntro() {
+  const navigate = useNavigate()
   return (
     <>
      {/* ── Hero Section ── */}
@@ -30,11 +32,11 @@ function BrandIntro() {
 
         {/* CTA Buttons */}
         <div className="ctaGroup">
-          <button className="btnPrimary">
+          <button onClick={()=>navigate('/register')} className="btnPrimary">
             Get Started
             <span className="btnArrow">→</span>
           </button>
-          <button className="btnSecondary">Sign In</button>
+          <button onClick={()=>navigate("/login")} className="btnSecondary">Sign In</button>
         </div>
 
       </section>

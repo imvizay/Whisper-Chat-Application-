@@ -1,43 +1,54 @@
-import React from "react";
 import "../../assets/css/chat_dashboard/chat-sidebar.css";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from 'react-router-dom'
 
-// state
-import { useState } from "react";
+// icons
+import { Handshake , MessagesSquare, User , Bell, SettingsIcon, Home } from 'lucide-react'
 
-// navigation 
-import { useNavigate } from 'react-router-dom'
-
-// icons lucide-react
-import { Handshake , MessagesSquare, User , Bell, SettingsIcon } from 'lucide-react'
-import RecentChatList from "./RecentChats";
-
+// component
+import FriendsPanel from "./FriendsPanel";
 
 const INITIAL_FEATURES = [ 
-  {icon:MessagesSquare, name:'chats',         isActive:true  , path:''  },
-  {icon:User,           name:'friends',       isActive:false , path:'friends-list'  },
-  {icon:Bell,           name:'notifications', isActive:false , isNotificationIcon:true, path:'notifications' },
-  {icon:SettingsIcon,   name:'settings',      isActive:false , path: 'settings' },
+  {icon:Home,           name:'mobileHomeIndex', path:'', hideOnDesktop:true},
+  {icon:MessagesSquare, name:'chats',          path:'chats'},
+  {icon:User,           name:'friends',        path:'friends-list'},
+  {icon:Bell,           name:'notifications',  path:'notifications', isNotificationIcon:true},
+  {icon:SettingsIcon,   name:'settings',       path:'settings', hideOnDesktop:true },
 ]
 
 function ChatBar() {
 
-  const [featureIcon,setFeatureIcon] = useState(INITIAL_FEATURES)
-  
   const navigate = useNavigate()
+  const location = useLocation()
 
-  // Handle Active Icon On Ui.
-  const handleActiveIcon = (name,path) => {
-    setFeatureIcon((prev)=>(
-      prev.map(icon=>({
-        ...icon,
-        isActive:icon.name == name
-      }))
-    ))
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 480)
 
-    navigate(`${path}`)
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 480)
+    window.addEventListener("resize", handleResize)
+    return () => window.removeEventListener("resize", handleResize)
+  }, [])
 
+  // Active Feature logic 
+  const getActiveFeature = (feature) => {
+    const currentPath = location.pathname
+
+    // base route
+    if (currentPath === "/chat-dashboard") {
+      return isMobile
+        ? feature.name === "mobileHomeIndex"
+        : feature.name === "chats"
+    }
+
+    // exact match
+    return currentPath === `/chat-dashboard/${feature.path}`
   }
 
+  // filter based on screen
+  const visibleFeatures = INITIAL_FEATURES.filter(feature => {
+    if (!isMobile && feature.hideOnDesktop) return false
+    return true
+  })
 
   return (
     <aside className="chatBarContainer">
@@ -64,28 +75,34 @@ function ChatBar() {
       {/* Service Icons */}
       <div className="chatServicePanel">
 
-        {featureIcon.map((btn)=>(
-          <button 
-            onClick={ () => handleActiveIcon( btn.name, btn.path )}
+        {visibleFeatures.map((btn) => {
+          const isActive = getActiveFeature(btn)
 
-            className = {`serviceIcon ${btn.isActive ? 'activeService' : 
-                                        btn.isNotificationIcon ? "notificationIcon" : ''}`
-                        }
-          >
-            <btn.icon/>
-            {btn.isNotificationIcon && <span className="notificationDot"></span>}
-          </button>
-        ))}
+          return (
+            <button 
+              key={btn.name}
+              onClick={() => navigate(`/chat-dashboard/${btn.path}`)}
+
+              className={`serviceIcon 
+                ${isActive ? 'activeService' : ''}
+                ${btn.isNotificationIcon ? "notificationIcon" : ''}
+              `}
+            >
+              <btn.icon/>
+              {btn.isNotificationIcon && <span className="notificationDot"></span>}
+            </button>
+          )
+        })}
 
       </div>
 
       {/* Recent Chats */}
       <div className="recentChatsContainer">
-        <RecentChatList/>
+        <FriendsPanel/>
       </div>
 
     </aside>
   );
 }
 
-export default ChatBar;
+export default ChatBar

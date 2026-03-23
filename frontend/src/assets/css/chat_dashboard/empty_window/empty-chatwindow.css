@@ -1,101 +1,338 @@
-.emptyChatWindow{
-    width:100%;
-    height:100%;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:flex-start;
-    padding:40px;
-    gap:30px;
-    color:white;
+/* ================================================================
+   EMPTY CHAT WINDOW — Find Friends
+================================================================ */
+
+.emptyChatWindow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100%;
+  padding: 48px 24px 24px;
+  gap: 24px;
+  overflow-y: auto;
+  background: radial-gradient(circle at top, #0f172a, #020617);
+  color: #fff;
+  font-family: 'Inter', sans-serif;
 }
 
-/* Header */
+/* ── Header ─────────────────────────────────────────────────── */
 
-.searchHeader{
-    text-align:center;
+.searchHeader {
+  text-align: center;
 }
 
-.searchHeader h2{
-    font-size:26px;
+.searchHeader h2 {
+  margin: 0 0 6px;
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
 }
 
-.searchHeader p{
-    color:#a78bfa;
+.searchHeader p {
+  margin: 0;
+  font-size: 13px;
+  color: #6b7280;
+  line-height: 1.5;
 }
 
-/* Search Box */
+/* ── Search Box ─────────────────────────────────────────────── */
 
-.searchBoxWrapper{
-    display:flex;
-    gap:10px;
-    width:400px;
+.searchBoxWrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 520px;
 }
 
-.searchInput{
-    flex:1;
-    padding:12px;
-    border-radius:10px;
-    border:none;
-    background:rgba(255,255,255,0.05);
-    color:white;
+.searchInput {
+  flex: 1;
+  min-width: 0;
+  padding: 11px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  outline: none;
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  transition: background 0.2s, border-color 0.2s;
 }
 
-.searchButton{
-    padding:12px 20px;
-    border-radius:10px;
-    border:none;
-    background:linear-gradient(135deg,#7c3aed,#a855f7);
-    color:white;
-    cursor:pointer;
+.searchInput::placeholder {
+  color: #4b5563;
 }
 
-/* Results */
-
-.searchResults{
-    width:400px;
-    display:flex;
-    flex-direction:column;
-    gap:14px;
+.searchInput:focus {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(99, 102, 241, 0.45);
 }
 
-/* User Card */
-
-.searchUserCard{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:12px 16px;
-    border-radius:12px;
-    background:rgba(255,255,255,0.05);
+.searchButton {
+  flex-shrink: 0;
+  padding: 11px 20px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.15s, box-shadow 0.15s;
 }
 
-.userAvatar{
-    width:40px;
-    height:40px;
-    border-radius:50%;
-    background:linear-gradient(135deg,#7c3aed,#a855f7);
-    display:flex;
-    align-items:center;
-    justify-content:center;
+.searchButton:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: scale(1.03);
+  box-shadow: 0 0 14px rgba(99, 102, 241, 0.5);
 }
 
-.userInfo{
-    flex:1;
-    margin-left:10px;
+.searchButton:disabled {
+  background: rgba(255, 255, 255, 0.07);
+  color: #4b5563;
+  cursor: not-allowed;
 }
 
-.addFriendButton{
-    background:#22c55e;
-    border:none;
-    padding:8px 14px;
-    border-radius:8px;
-    cursor:pointer;
+/* ── Results List ───────────────────────────────────────────── */
+
+.searchResults {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  max-width: 520px;
 }
 
-.pendingButton{
-    background:#6b7280;
-    border:none;
-    padding:8px 14px;
-    border-radius:8px;
+/* ── User Card ──────────────────────────────────────────────── */
+
+.searchUserCard {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  transition: background 0.15s;
+}
+
+.searchUserCard:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.userAvatar {
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 15px;
+  font-weight: 600;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  box-shadow: 0 0 10px rgba(99, 102, 241, 0.35);
+}
+
+.userInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.userInfo p {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 500;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.addFriendButton {
+  flex-shrink: 0;
+  padding: 7px 16px;
+  border-radius: 999px;
+  border: none;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.addFriendButton:hover:not(:disabled) {
+  opacity: 0.85;
+  transform: scale(1.04);
+}
+
+.addFriendButton:disabled {
+  background: rgba(255, 255, 255, 0.07);
+  color: #6b7280;
+  cursor: default;
+}
+
+/* ================================================================
+   MEDIA QUERIES
+================================================================ */
+
+/* ── 480px ──────────────────────────────────────────────────── */
+
+@media (max-width: 480px) {
+  .emptyChatWindow {
+    padding: 32px 16px 20px;
+    gap: 20px;
+  }
+
+  .searchHeader h2 {
+    font-size: 19px;
+  }
+
+  .searchHeader p {
+    font-size: 12px;
+  }
+
+  .searchInput {
+    font-size: 16px; /* prevents iOS zoom */
+    padding: 10px 14px;
+  }
+
+  .searchButton {
+    padding: 10px 16px;
+    font-size: 13px;
+  }
+
+  .searchUserCard {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .userAvatar {
+    width: 36px;
+    height: 36px;
+    font-size: 14px;
+  }
+
+  .userInfo p {
+    font-size: 13px;
+  }
+
+  .addFriendButton {
+    padding: 6px 13px;
+    font-size: 12px;
+  }
+}
+
+/* ── 360px ──────────────────────────────────────────────────── */
+
+@media (max-width: 360px) {
+  .emptyChatWindow {
+    padding: 24px 12px 16px;
+    gap: 16px;
+  }
+
+  .searchHeader h2 {
+    font-size: 17px;
+  }
+
+  .searchHeader p {
+    font-size: 11.5px;
+  }
+
+  /* Stack search button below input on very small screens */
+  .searchBoxWrapper {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .searchInput {
+    width: 100%;
+    font-size: 16px;
+    padding: 10px 14px;
+  }
+
+  .searchButton {
+    width: 100%;
+    padding: 10px;
+    font-size: 13px;
+    text-align: center;
+  }
+
+  .searchUserCard {
+    padding: 9px 10px;
+    gap: 9px;
+    border-radius: 12px;
+  }
+
+  .userAvatar {
+    width: 34px;
+    height: 34px;
+    font-size: 13px;
+  }
+
+  .userInfo p {
+    font-size: 12.5px;
+  }
+
+  .addFriendButton {
+    padding: 6px 11px;
+    font-size: 11.5px;
+  }
+}
+
+/* ── 280px ──────────────────────────────────────────────────── */
+
+@media (max-width: 280px) {
+  .emptyChatWindow {
+    padding: 18px 10px 14px;
+    gap: 14px;
+  }
+
+  .searchHeader h2 {
+    font-size: 15px;
+  }
+
+  .searchHeader p {
+    font-size: 11px;
+  }
+
+  .searchInput {
+    padding: 9px 12px;
+    font-size: 15px;
+    border-radius: 10px;
+  }
+
+  .searchButton {
+    padding: 9px;
+    font-size: 12.5px;
+    border-radius: 10px;
+  }
+
+  .searchUserCard {
+    padding: 8px;
+    gap: 8px;
+    border-radius: 10px;
+  }
+
+  /* Avatar shrinks, show initials only */
+  .userAvatar {
+    width: 30px;
+    height: 30px;
+    font-size: 12px;
+  }
+
+  .userInfo p {
+    font-size: 12px;
+  }
+
+  /* Button shrinks to icon-like size */
+  .addFriendButton {
+    padding: 5px 9px;
+    font-size: 11px;
+    border-radius: 8px;
+  }
 }
