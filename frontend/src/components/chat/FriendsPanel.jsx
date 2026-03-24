@@ -33,7 +33,7 @@ function FriendsPanel() {
     queryKey:["friendlist"],
     queryFn: () => friendReqApi.loadFriendList()
   }) 
-console.log("friends:", friends)
+  console.log("friends:", friends)
   const navigate = useNavigate()
 
   if (isLoading) 
@@ -64,7 +64,7 @@ console.log("friends:", friends)
       })
 
     } catch (error) {
-      console.error("Error opening chat:", error);
+      console.error("Error opening chat:", error)
     }
   }
 

@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 from chat.models import Chat
 from users.models import AccountHolder
-from chat.models import Message
+from chat.models import Message,UserStatus
 
 from rest_framework.response import Response
 
@@ -43,3 +43,13 @@ def get_chat_messages(request, chat_id):
     ]
 
     return Response(data)
+
+@api_view(["GET"])
+def get_friend_lastseen(request,pk):
+
+    status = UserStatus.objects.filter(user=pk).first()
+
+    return Response({
+        "is_online": status.is_online if status else False,
+        "last_seen": status.last_seen if status else None
+    })
