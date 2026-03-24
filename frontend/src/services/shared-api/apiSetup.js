@@ -57,23 +57,33 @@ api.interceptors.response.use(
 
       try {
         console.log("Running Refresh Token Api")
-        const raw = localStorage.getItem("authUser")
-        const refToken = JSON.parse(raw)
 
-        const res = await axios.post(`${BASEURL_DEV}/api/token/refresh/`, {
-          refresh: refToken
+        const authUser = localStorage.getItem("authUser")
+        const parsed = JSON.parse(authUser)
+
+        console.log("Api Call To Refresh Token Endpoint")
+        const res = await api.post(`${BASEURL_DEV}/token/refresh/`, {
+          refresh: parsed.refresh
         })
 
-        const newAccess = res.data.access
-        localStorage.setItem("access", newAccess)
+        console.log("Before Error Jump Res Data State",res.access)
+        const newAccess = res.access
+        
+        const updatedAuthUser = {
+          ...parsed,
+          access:newAccess
+        }
+        console.log("Updating AuthUser on Localstorage")
+        localStorage.setItem("authUser", JSON.stringify(updatedAuthUser))
 
         console.log("Retrying Original Request with new token")
 
         // update header
-        axios.defaults.headers.common["Authorization"] = `Bearer ${newAccess}`
+        api.defaults.headers.common["Authorization"] = `Bearer ${newAccess}`
+        originalRequest.headers["Authorization"] = `Bearer ${newAccess}`
 
         // retry original request
-        return axios(originalRequest)
+        return api(originalRequest)
 
       } catch (err) {
         console.log("Refresh failed logout user")

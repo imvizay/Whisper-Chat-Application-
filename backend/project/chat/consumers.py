@@ -30,7 +30,8 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.accept()
 
         # Mark online
-        await self.mark_online(self.user)
+        await self.mark_online(self.user.id)
+       
 
         # Broadcast online status
         await self.channel_layer.group_send(
@@ -231,7 +232,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     @sync_to_async
     def mark_online(self, user_id):
-        status, _ = UserStatus.objects.get_or_create(user_id=user_id.id)
+        status, _ = UserStatus.objects.get_or_create(user_id=user_id)
         status.is_online = True
         status.save()
 

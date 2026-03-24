@@ -1,5 +1,14 @@
 import os
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')  
+from dotenv import load_dotenv 
+
+# load .env file
+load_dotenv()
+
+os.environ.setdefault(
+    'DJANGO_SETTINGS_MODULE',
+    os.getenv('DJANGO_SETTINGS_MODULE', 'config.settings.dev')
+)
+
 
 import django
 django.setup()

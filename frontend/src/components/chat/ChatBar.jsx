@@ -1,12 +1,12 @@
-import "../../assets/css/chat_dashboard/chat-sidebar.css";
-import { useState, useEffect } from "react";
+import "../../assets/css/chat_dashboard/chat-sidebar.css"
+import { useState, useEffect } from "react"
 import { useNavigate, useLocation } from 'react-router-dom'
 
 // icons
 import { Handshake , MessagesSquare, User , Bell, SettingsIcon, Home } from 'lucide-react'
 
 // component
-import FriendsPanel from "./FriendsPanel";
+import FriendsPanel from "./FriendsPanel"
 
 const INITIAL_FEATURES = [ 
   {icon:Home,           name:'mobileHomeIndex', path:'', hideOnDesktop:true},
@@ -103,7 +103,7 @@ function ChatBar() {
       </div>
 
     </aside>
-  );
+  )
 }
 
 export default ChatBar

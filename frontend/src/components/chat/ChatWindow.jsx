@@ -9,9 +9,12 @@ import { getWebSocketUrl } from "../../services/chatsApi"
 // icons 
 import { Check, CheckCheck, Eye, MoveLeft, StepBack } from "lucide-react"
 
+// api
+import { getLastSeen } from "../../services/chatsApi"
+
 function ChatWindow() {
   const [input, setInput] = useState("")
-  const [userStatus, setUserStatus] = useState({
+  const [liveStatus, setLiveStatus] = useState({
     isOnline:false,
     lastSeen:null
   })
@@ -38,6 +41,12 @@ function ChatWindow() {
     const res = await fetch(`${BASEURL_DEV}/chat/${chatId}/messages/`)
     return res.json()
   }
+
+  const {data,isLoading } = useQuery({
+    queryKey:["lastseen",friend.id],
+    queryFn: () => getLastSeen.friendlastSeen(friend.id),
+    enabled: !!friend?.id,
+  })
 
   // Chat History Record
   const { data: messages = [] } = useQuery({
@@ -79,8 +88,8 @@ function ChatWindow() {
     ws.onmessage = (event) => {
 
       const data = JSON.parse(event.data)
-      console.log('recieved data:',data)
-
+      console.log("WS DATA:", data)   
+    
       if (data.type === "typing" && data.user_id !== userId) {
         setIsTyping(true)
         return
@@ -105,13 +114,17 @@ function ChatWindow() {
       }
 
       if(data.type === "user_status"){
-
         console.log("user status data:",data)
-        setUserStatus({
+        // If my friend id not matches ignores
+        console.log("FRIEND ID:", friend?.id)
+        console.log("EVENT USER:", data.user_id)
+        if(data.user_id !== friend?.id) return
+
+        setLiveStatus({
           isOnline:data?.is_online,
           lastSeen:data?.last_seen || null
         })
-        return
+
       }
 
       if(data.type === "chat_message"){
@@ -124,14 +137,12 @@ function ChatWindow() {
 
     }
 
-
-
     // web socket disconnected
     ws.onclose = () => {
   
       // setIsConnected(false)
       console.log("websocket disconnected")
-      setUserStatus({
+      setLiveStatus({
         isOnline:false,
         lastSeen:null
       })
@@ -211,6 +222,13 @@ function ChatWindow() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
 
+
+  const finalStatus = {
+          isOnline: liveStatus?.isOnline || data?.is_online || false,
+          lastSeen: liveStatus?.lastSeen || data?.last_seen || null
+        }
+        
+
   return (
     <div className="chatWindowContainer">
 
@@ -229,16 +247,16 @@ function ChatWindow() {
           <div>
             <h4>{friend?.username?.toUpperCase() || "User"}</h4>
             <p className="statusText">
-                {isTyping
-                  ? "Typing..."
-                  : userStatus.isOnline
-                  ? "Online"
-                  : userStatus.lastSeen
-                  ? `last seen at ${new Date(userStatus.lastSeen).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}`
-                  : "Offline"}
+              {isTyping
+                ? "Typing..."
+                : finalStatus.isOnline
+                ? "Online"
+                : finalStatus.lastSeen
+                ? `last seen at ${new Date(finalStatus.lastSeen).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit"
+                  })}`
+                : "Offline"}
             </p>
           </div>
         </div>
@@ -293,7 +311,7 @@ function ChatWindow() {
           placeholder="Type a message..."
         />
 
-        <button onClick={sendMessage} disabled={!userStatus.isOnline}>
+        <button onClick={sendMessage} disabled={!finalStatus.isOnline}>
           Send
         </button>
       </div>
