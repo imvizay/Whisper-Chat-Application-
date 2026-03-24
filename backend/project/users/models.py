@@ -31,7 +31,7 @@ from django.utils import timezone
 from datetime import timedelta
 class OtpVerification(models.Model):
     username = models.CharField(max_length=20,unique=True,default="vizaymeena")
-    password = models.CharField(max_length=8,default="anjani123")
+    password = models.CharField(max_length=15,default="anjani123")
     status = models.CharField(max_length=20,default="inactive")
     contact = models.CharField(max_length=10,blank=False,null=False)
     otp = models.CharField(max_length=6,blank=False,null=False)
