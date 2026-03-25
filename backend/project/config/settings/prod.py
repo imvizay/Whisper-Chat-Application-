@@ -19,6 +19,7 @@ CHANNEL_LAYERS = {
         "BACKEND": "channels_redis.core.RedisChannelLayer",
         "CONFIG": {
             "hosts": [os.getenv("REDIS_URL")],
+            "ssl":True # req for redis cloud
         },
     },
 }
