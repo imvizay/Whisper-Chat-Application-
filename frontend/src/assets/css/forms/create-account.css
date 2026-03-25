@@ -98,6 +98,18 @@
   transition: 0.3s ease;
 }
 
+.accountExists{
+  display: inline-block;
+  font-size: 14px;
+  text-align: center;
+}
+.accountExists small{
+  color: blue;
+  margin-left: 5px;
+  font-size: 16px;
+  text-decoration: underline;
+}
+
 
 /* MEDIA QUERY */
 

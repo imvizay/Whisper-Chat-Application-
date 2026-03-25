@@ -11,6 +11,8 @@ import OtpVerification from './Verification'
 import { validateAccountForm } from '../../utilis/account-validation-form'
 import { authApi } from '../../services/authApi'
 
+import { useNavigate } from 'react-router-dom'
+
 export default function RegisterAccount() {
 
   // registeration form default open 
@@ -31,6 +33,8 @@ export default function RegisterAccount() {
     password:"",
     confirm_password:"",
   })
+
+  const navigate = useNavigate()
 
 
   const handleInputField = (e) => {
@@ -90,7 +94,6 @@ export default function RegisterAccount() {
 
 
   // OtpBox Component Fn.
-
   const onVerify = () => {
     
   }
@@ -142,6 +145,8 @@ export default function RegisterAccount() {
               {sendOtpMutation.isPending ? "Sending..." : "Continue"}
             </button>
           </form>
+
+          <span className='accountExists'>already have an account ?<small onClick={()=>navigate("/login")}>Login</small> </span>
       </>
      )}
 

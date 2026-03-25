@@ -3,11 +3,14 @@ import "../../assets/css/forms/otp-verification.css";
 
 import { authApi } from "../../services/authApi";
 import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from 'react-router-dom'
 
 function OtpVerification({ userData,setIsRegForm,  setIsOtpBox ,onVerify }) {
   const [otp, setOtp] = useState(new Array(6).fill(""))
   const [timer, setTimer] = useState(60)
   const inputsRef = useRef([])
+
+  const navigate = useNavigate()
 
   // Close Otp Dialog Box
   const closeOtpWindow = () => {
@@ -64,12 +67,13 @@ function OtpVerification({ userData,setIsRegForm,  setIsOtpBox ,onVerify }) {
     onSuccess : () => {
       setIsOtpBox(false)
       setIsRegForm(false)
-      alert("account created successfully on whisper.")
+      navigate('/login')
+      console.log("Account Created Successfully On Whisper.")
     },
     onError: (error)=>{
       
-      console.log("otp verification failed",error)
-      alert("failed otp verification")
+      console.log("Otp Verification Failed",error)
+      alert("Failed OTP Verification")
     }
   })
 
