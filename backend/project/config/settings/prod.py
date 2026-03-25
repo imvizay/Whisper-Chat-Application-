@@ -4,7 +4,7 @@ from .base import *
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['https://whisper-7bux.onrender.com']
+ALLOWED_HOSTS = ['whisper-7bux.onrender.com']
 
 CORS_ALLOWED_ORIGINS = [
     'https://whisper-chat-application.onrender.com'
