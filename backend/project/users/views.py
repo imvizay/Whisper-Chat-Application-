@@ -30,6 +30,7 @@ class SendRegistrationOTP(APIView):
         serializer = AccountHolderSerializer(data=request.data)
 
         if not serializer.is_valid():
+            print("ERRORS:", serializer.errors)   # 👈 THIS
             return Response(serializer.errors,status=400)
         
         contact = serializer.validated_data["contact"]
