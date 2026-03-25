@@ -29,8 +29,8 @@ class SendRegistrationOTP(APIView):
         # Validate incoming fields and save as inactive user instance.
         serializer = AccountHolderSerializer(data=request.data)
 
-        if not serializer.is_valid(raise_exception=True):
-            return Response(serializer.errors)
+        if not serializer.is_valid():
+            return Response(serializer.errors,status=400)
         
         contact = serializer.validated_data["contact"]
 
