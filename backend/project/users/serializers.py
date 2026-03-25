@@ -2,23 +2,30 @@
 from users.models import AccountHolder
 
 from rest_framework.response import Response
+from rest_framework import serializers
 from rest_framework.serializers import ModelSerializer
 from rest_framework.validators import ValidationError
 
 import re
 class AccountHolderSerializer(ModelSerializer):
 
+    confirm_password = serializers.CharField(write_only=True)
+
 
     def validate(self, attrs):
         username = attrs.get("username","").strip()
         contact = attrs.get("contact","").strip()
         password = attrs.get("password").strip()
-        confirm_password = attrs.pop("confirm_password",None)
+        confirm_password = attrs.pop("confirm_password","").strip()
+        
 
-
+    
         errors = {}
 
         if password != confirm_password:
+            print("PASSWORD : ",password)
+            print("CONFIRM PASSWORD : ",confirm_password)
+
             errors["confirm_password"] = "password and confirm password does not match,Please Retry!."
         
         # -------------------
@@ -60,7 +67,6 @@ class AccountHolderSerializer(ModelSerializer):
             "id":{"read_only":True}, 
             "password":{"write_only":True},
             "status":{"read_only":True},
-            "confirm_password":{"write_only":True},
             "account_status":{"read_only":True}   
         }
 

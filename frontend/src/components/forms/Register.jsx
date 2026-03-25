@@ -26,10 +26,10 @@ export default function RegisterAccount() {
   })
 
   const [userDataError,setUserDataError] = useState({
-    usernameError:"",
-    contactError:"",
-    passwordError:"",
-    confirm_passwordError:"",
+    username:"",
+    contact:"",
+    password:"",
+    confirm_password:"",
   })
 
 
@@ -55,7 +55,17 @@ export default function RegisterAccount() {
     
     onError : (error) => {
       alert("Failed to send Otp. Retry.")
-      console.log(error)
+      const formattedErrors = Object.fromEntries(
+        Object.entries(error?.response?.data || {}).map(([key,value])=>[
+          key,
+          value[0]
+        ]
+      ))
+      setUserDataError((p)=>({
+        ...p,
+        ...formattedErrors
+      }))
+      console.log("API ERROR : ",error)
     }
   })
 
@@ -99,6 +109,7 @@ export default function RegisterAccount() {
                      name = "username" value={userData.username} onChange={handleInputField}
               />
               <small className='fieldInfo'>Note : username must be unique and can only include ( _ ) as special character and none other</small>
+              <small className='fieldInfo' style={{color:"red"}}>{userDataError.username && userDataError.username}</small>
             </div>
 
             {/* contact field */}
@@ -107,7 +118,7 @@ export default function RegisterAccount() {
               <input type = "text" placeholder = 'mobile number'
                      name = "contact" value = {userData.contact} onChange = {handleInputField}
               />
-              {/* <small className='fieldInfo'> Note : 10 digits mobile number </small> */}
+              <small style={{color:"red"}} className='fieldInfo'>{userDataError.contact && userDataError.contact}</small>
             </div>
 
             {/* password field */}
@@ -116,7 +127,7 @@ export default function RegisterAccount() {
               <input type="text" placeholder='password'
                      name = "password" value={userData.password} onChange={handleInputField} 
               />
-              {/* <small className='fieldInfo'>incorrect password</small> */}
+              <small style={{color:"red"}} className='fieldInfo'>{userDataError.password && userDataError.password}</small>
             </div>
 
             {/* confirm password field */}
